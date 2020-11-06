@@ -1,4 +1,4 @@
-"""Patch librairies to be automatically instrumented.
+"""Patch libraries to be automatically instrumented.
 
 It can monkey patch supported standard libraries and third party modules.
 A patched module will automatically report spans with its default configuration.
@@ -58,6 +58,7 @@ PATCH_MODULES = {
     "mako": True,
     "flask": True,
     "kombu": False,
+    "starlette": True,
     "rq": True,
     # Ignore some web framework integrations that might be configured explicitly in code
     "falcon": False,
@@ -66,6 +67,7 @@ PATCH_MODULES = {
     # Auto-enable logging if the environment variable DD_LOGS_INJECTION is true
     "logging": config.logs_injection,
     "pynamodb": True,
+    "pyodbc": True,
 }
 
 _LOCK = threading.Lock()
@@ -85,6 +87,7 @@ _PATCH_ON_IMPORT = {
     "requests": ("requests",),
     "botocore": ("botocore",),
     "elasticsearch": ("elasticsearch",),
+    "pynamodb": ("pynamodb",),
 }
 
 

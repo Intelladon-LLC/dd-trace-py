@@ -107,18 +107,25 @@ else:
     encoding_macros = [("__LITTLE_ENDIAN__", "1")]
 
 
-if platform.uname()[0] != "Windows":
-    encoding_libraries = []
-    extra_compile_args = ["-DPy_BUILD_CORE"]
-else:
+if platform.system() == "Windows":
     encoding_libraries = ["ws2_32"]
     extra_compile_args = []
+    debug_compile_args = []
+else:
+    encoding_libraries = []
+    extra_compile_args = ["-DPy_BUILD_CORE"]
+    if "DD_COMPILE_DEBUG" in os.environ and platform.system() == "Linux":
+        debug_compile_args = ["-g", "-Werror", "-Wall", "-Wextra", "-Wpedantic", "-fanalyzer"]
+    else:
+        debug_compile_args = []
+
 
 if sys.version_info[:2] >= (3, 4):
     ext_modules = [
         Extension(
             "ddtrace.profiling.collector._memalloc",
             sources=["ddtrace/profiling/collector/_memalloc.c"],
+            extra_compile_args=debug_compile_args,
         ),
     ]
 else:
@@ -167,6 +174,7 @@ setup(
             "Programming Language :: Python :: 3.6",
             "Programming Language :: Python :: 3.7",
             "Programming Language :: Python :: 3.8",
+            "Programming Language :: Python :: 3.9",
         ],
         use_scm_version=True,
         setup_requires=["setuptools_scm[toml]>=4", "cython"],
@@ -204,6 +212,11 @@ setup(
                 Cython.Distutils.Extension(
                     "ddtrace.profiling.collector._threading",
                     sources=["ddtrace/profiling/collector/_threading.pyx"],
+                    language="c",
+                ),
+                Cython.Distutils.Extension(
+                    "ddtrace.profiling.exporter.pprof",
+                    sources=["ddtrace/profiling/exporter/pprof.pyx"],
                     language="c",
                 ),
                 Cython.Distutils.Extension(

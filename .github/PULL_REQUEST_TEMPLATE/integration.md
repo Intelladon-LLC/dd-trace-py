@@ -10,7 +10,7 @@ This PR adds support for [`<integration>`](<!--link to relevant integration docs
 ## Checklist
 - [ ] Documentation added in `__init__.py`.
 - [ ] [Corp docs](https://github.com/Datadog/documentation) are updated.
-- [ ] Entry added to `CHANGELOG.md`.
+- [ ] Entry added to release notes using [reno](https://docs.openstack.org/reno/latest/user/usage.html)
 
 ### Testing
 - [ ] Tests are added to CI.
@@ -27,3 +27,4 @@ This PR adds support for [`<integration>`](<!--link to relevant integration docs
 - [ ] 500-level responses are tagged as errors
 - [ ] Async (if applicable)
   - [ ] Span parenting behaves as expected.
+- [ ] Request headers specified in the config are stored
